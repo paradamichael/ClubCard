@@ -9,9 +9,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'robots.txt'],
       manifest: {
-        name: 'GolfScoreApp',
-        short_name: 'GolfScores',
-        description: 'Simple golf scoring PWA',
+        name: 'ClubCard',
+        short_name: 'ClubCard',
+        description: 'Simple golf scorekeeper PWA',
         theme_color: '#ffffff',
         background_color: '#ffffff',
         display: 'standalone',

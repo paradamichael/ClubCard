@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Button from './Button'
 
 type Props = { onAdd: (score: { hole: number; strokes: number }) => void }
 
@@ -15,15 +16,19 @@ export default function ScoreInput({ onAdd }: Props) {
 
   return (
     <form onSubmit={submit} style={{ marginBottom: '1rem' }}>
-      <label>
-        Hole:
-        <input type="number" value={hole} min={1} onChange={e => setHole(Number(e.target.value))} />
-      </label>
-      <label style={{ marginLeft: '1rem' }}>
-        Strokes:
-        <input type="number" value={strokes} min={1} onChange={e => setStrokes(Number(e.target.value))} />
-      </label>
-      <button type="submit" style={{ marginLeft: '1rem' }}>Add</button>
+      <div className="form-row">
+        <label>
+          Hole:
+          <input type="number" value={hole} min={1} onChange={e => setHole(Number(e.target.value))} />
+        </label>
+
+        <label>
+          Strokes:
+          <input type="number" value={strokes} min={1} onChange={e => setStrokes(Number(e.target.value))} />
+        </label>
+
+        <Button type="submit">Add</Button>
+      </div>
     </form>
   )
 }

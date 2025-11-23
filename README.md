@@ -1,6 +1,6 @@
-# GolfScoreApp
+# ClubCard
 
-A small React + TypeScript PWA for tracking golf scores. Scaffolding created by Copilot assistant.
+A small React + TypeScript PWA for tracking golf scores. Scaffolding created by the assistant.
 
 Quick start
 

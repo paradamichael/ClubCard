@@ -1,6 +1,6 @@
 {
-  "name": "GolfScoreApp",
-  "short_name": "GolfScores",
+  "name": "ClubCard",
+  "short_name": "ClubCard",
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#ffffff",
