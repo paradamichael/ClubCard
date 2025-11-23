@@ -1,0 +1,12 @@
+{
+  "name": "GolfScoreApp",
+  "short_name": "GolfScores",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "icons": [
+    { "src": "/pwa-192x192.svg", "sizes": "192x192", "type": "image/svg+xml" },
+    { "src": "/pwa-512x512.svg", "sizes": "512x512", "type": "image/svg+xml" }
+  ]
+}
