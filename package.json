@@ -5,11 +5,17 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "cap:sync:ios": "npm run build && npx cap copy ios",
+    "cap:open:ios": "npx cap open ios",
+    "backend:dev": "cd backend && mvn spring-boot:run",
+    "backend:build": "cd backend && mvn clean package -DskipTests",
+    "dev:all": "echo 'Start backend in one terminal: npm run backend:dev' && echo 'Start frontend: npm run dev'"
   },
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "keycloak-js": "^22.0.0",
     "react-router-dom": "^6.18.0"
   },
   "devDependencies": {

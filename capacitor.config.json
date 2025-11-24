@@ -1,0 +1,6 @@
+{
+  "appId": "com.paradamichael.clubcard",
+  "appName": "ClubCard",
+  "webDir": "dist",
+  "bundledWebRuntime": false
+}

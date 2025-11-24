@@ -1,11 +1,27 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import ScoreInput from '../components/ScoreInput'
 import { useScores } from '../hooks/useScores'
 import Card from '../components/Card'
 import Button from '../components/Button'
+import CourseService from '../services/courseService'
+import ScorecardService from '../services/scorecardService'
 
 export default function Scorecard() {
   const { scores, addScore, clearScores } = useScores()
+  const [courses, setCourses] = useState<any[]>([])
+  const [selectedCourse, setSelectedCourse] = useState<number | ''>('')
+
+  useEffect(() => {
+    CourseService.list().then(setCourses).catch(() => setCourses([]))
+  }, [])
+
+  async function saveRound() {
+    if (!selectedCourse) return alert('Select a course')
+    const payload = { course: { id: selectedCourse }, scores: scores.map(s => s.strokes) }
+    await ScorecardService.create(payload)
+    alert('Round saved')
+    clearScores()
+  }
 
   return (
     <div className="app-container">
@@ -20,7 +36,14 @@ export default function Scorecard() {
               ))}
             </ul>
             <div style={{marginTop:12}}>
+              <select value={selectedCourse as any} onChange={e => setSelectedCourse(e.target.value === '' ? '' : Number(e.target.value))}>
+                <option value="">Select course</option>
+                {courses.map(c => <option key={c.id} value={c.id}>{c.courseName}</option>)}
+              </select>
+            </div>
+            <div style={{marginTop:12}}>
               <Button variant="secondary" onClick={clearScores}>Clear Scores</Button>
+              <Button onClick={saveRound} style={{marginLeft:8}}>Save Round</Button>
             </div>
           </Card>
         </div>

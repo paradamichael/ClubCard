@@ -1,5 +1,14 @@
+# Frontend
 node_modules/
 dist/
 .env
 .DS_Store
 .vscode/
+
+# Backend
+backend/target/
+backend/.mvn/
+backend/mvnw
+backend/mvnw.cmd
+backend/.idea/
+backend/*.iml
