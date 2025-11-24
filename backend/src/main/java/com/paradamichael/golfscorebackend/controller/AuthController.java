@@ -2,10 +2,7 @@ package com.paradamichael.golfscorebackend.controller;
 
 import com.paradamichael.golfscorebackend.model.User;
 import com.paradamichael.golfscorebackend.repository.UserRepository;
-import com.paradamichael.golfscorebackend.security.JwtUtils;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,15 +10,12 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
+@CrossOrigin(origins = "*")
 public class AuthController {
-    private final AuthenticationManager authenticationManager;
-    private final JwtUtils jwtUtils;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public AuthController(AuthenticationManager authenticationManager, JwtUtils jwtUtils, UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.authenticationManager = authenticationManager;
-        this.jwtUtils = jwtUtils;
+    public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -30,9 +24,16 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody Map<String, String> body) {
         String email = body.get("email");
         String password = body.get("password");
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
-        String token = jwtUtils.generateToken(email);
-        return ResponseEntity.ok(Map.of("token", token));
+        
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+        
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Invalid credentials"));
+        }
+        
+        // Return user info (in production, Keycloak will handle JWT tokens)
+        return ResponseEntity.ok(Map.of("user", Map.of("id", user.getId(), "email", user.getEmail(), "name", user.getName())));
     }
 
     @PostMapping("/signup")
@@ -48,8 +49,8 @@ public class AuthController {
         u.setName(name);
         u.setPassword(passwordEncoder.encode(password));
         userRepository.save(u);
-        String token = jwtUtils.generateToken(email);
-        return ResponseEntity.ok(Map.of("token", token));
+        // Return user info (Keycloak will handle JWT tokens in production)
+        return ResponseEntity.ok(Map.of("user", Map.of("id", u.getId(), "email", u.getEmail(), "name", u.getName())));
     }
 
     @PostMapping("/google")
@@ -83,8 +84,8 @@ public class AuthController {
                 userRepository.save(user);
             }
 
-            String token = jwtUtils.generateToken(email);
-            return ResponseEntity.ok(Map.of("token", token, "user", Map.of("email", email, "name", name)));
+            // Return user info (Keycloak will handle JWT tokens in production)
+            return ResponseEntity.ok(Map.of("user", Map.of("id", user.getId(), "email", email, "name", name)));
         } catch (org.springframework.web.client.RestClientException ex) {
             return ResponseEntity.status(401).body(Map.of("error", "Token verification failed"));
         }

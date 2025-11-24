@@ -10,7 +10,7 @@ import java.util.Map;
 
 @Repository
 public interface ScorecardRepository extends JpaRepository<Scorecard, Long> {
-    List<Scorecard> findByUserIdOrderByDatePlayedDesc(Long userId);
+    List<Scorecard> findByUserIdOrderByPlayedOnDesc(Long userId);
     
     @Query(value = "SELECT c.name as courseName, AVG(ss.score) as avgScore " +
                    "FROM scorecards sc " +

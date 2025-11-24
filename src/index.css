@@ -8,6 +8,22 @@ a { color: #0366d6; text-decoration: none; }
 	--accent-2:#ff6b6b; /* accent warm */
 	--card-shadow: 0 6px 18px rgba(13,16,24,0.06);
 	--radius:12px;
+	--border-color: #e0e0e0;
+	--input-bg: #ffffff;
+	--input-border: #e6e9ee;
+}
+
+.dark-mode{
+	--bg:#0f1724;
+	--surface:#1a202c;
+	--muted:#9ca3af;
+	--text:#f9fafb;
+	--accent:#06b6d4;
+	--accent-2:#ff6b6b;
+	--card-shadow: 0 6px 18px rgba(0,0,0,0.3);
+	--border-color: #2d3748;
+	--input-bg: #2d3748;
+	--input-border: #4a5568;
 }
 
 *{box-sizing:border-box}
@@ -42,7 +58,15 @@ header.app-header{display:flex;align-items:center;justify-content:space-between;
 .score-list li{padding:10px 12px;border-radius:10px;background:linear-gradient(180deg, rgba(6,182,212,0.02), transparent);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
 
 .form-row{display:flex;gap:10px;align-items:center}
-input[type=number]{width:80px;padding:8px 10px;border-radius:8px;border:1px solid #e6e9ee}
+input[type=number], input[type=text], input[type=email], input[type=password], select{
+	width:80px;
+	padding:8px 10px;
+	border-radius:8px;
+	border:1px solid var(--input-border);
+	background:var(--input-bg);
+	color:var(--text);
+}
+input[type=text], input[type=email], input[type=password], select{width:100%}
 label{font-size:14px;color:var(--muted)}
 
 .muted{color:var(--muted)}

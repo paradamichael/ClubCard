@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App'
 import { AuthProvider } from './context/AuthContext'
-import { KeycloakProvider } from './context/KeycloakProvider'
+import { ThemeProvider } from './context/ThemeContext'
 import './index.css'
 import { registerSW } from 'virtual:pwa-register'
 
@@ -13,11 +13,11 @@ registerSW({})
 createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <BrowserRouter>
-      <KeycloakProvider>
+      <ThemeProvider>
         <AuthProvider>
           <App />
         </AuthProvider>
-      </KeycloakProvider>
+      </ThemeProvider>
     </BrowserRouter>
   </React.StrictMode>
 )

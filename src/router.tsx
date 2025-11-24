@@ -8,6 +8,9 @@ import Profile from './pages/Profile'
 import Settings from './pages/Settings'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
+import CourseSelector from './pages/CourseSelector'
+import TeeSelector from './pages/TeeSelector'
+import PlayRound from './pages/PlayRound'
 import ProtectedRoute from './components/ProtectedRoute'
 
 export default function AppRoutes() {
@@ -40,6 +43,33 @@ export default function AppRoutes() {
         element={
           <ProtectedRoute>
             <Scorecard />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/course-selector"
+        element={
+          <ProtectedRoute>
+            <CourseSelector />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/tee-selector/:courseId"
+        element={
+          <ProtectedRoute>
+            <TeeSelector />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/play-round/:courseId/:teeName"
+        element={
+          <ProtectedRoute>
+            <PlayRound />
           </ProtectedRoute>
         }
       />

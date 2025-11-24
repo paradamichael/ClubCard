@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import AuthService from '../services/authService'
-import kc from '../keycloak'
 
 type User = { id?: string; email?: string; name?: string } | null
 
@@ -25,23 +24,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   })
 
-  // If Keycloak has a token, prefer that and populate user from token claims
-  useEffect(() => {
-    if (kc && (kc.token || kc.tokenParsed)) {
-      const t = kc.token as string | undefined
-      if (t) {
-        setToken(t)
-        localStorage.setItem('golf:token', t)
-      }
-      try {
-        const parsed: any = kc.tokenParsed
-        if (parsed) {
-          setUser({ id: parsed.sub, email: parsed.email, name: parsed.name || parsed.preferred_username })
-          localStorage.setItem('golf:user', JSON.stringify({ id: parsed.sub, email: parsed.email, name: parsed.name || parsed.preferred_username }))
-        }
-      } catch {}
-    }
-  }, [])
+  // Keycloak is disabled - using simple backend auth
 
   useEffect(() => {
     if (token) localStorage.setItem('golf:token', token)
@@ -54,35 +37,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [user])
 
   async function login(email?: string, password?: string) {
-    // If Keycloak is configured in the app, use it for interactive login
-    if (kc) {
-      kc.login()
-      return
-    }
     if (email && password) {
       const res = await AuthService.login(email, password)
-      setToken(res.token)
+      if (res.user) {
+        setUser(res.user)
+        setToken(res.token || 'simple-auth-token')
+      }
     }
   }
 
   async function signup(email: string, password: string, name?: string) {
-    // For Keycloak, user signup is typically handled via Keycloak's registration or admin flows
-    if (kc) {
-      // redirect to registration page
-      kc.register()
-      return
-    }
     const res = await AuthService.signup(email, password, name)
-    setToken(res.token)
+    if (res.user) {
+      setUser(res.user)
+      setToken(res.token || 'simple-auth-token')
+    }
   }
 
   function logout() {
-    // prefer Keycloak logout so session is cleared at IdP
-    if (kc) {
-      try { kc.logout() } catch {}
-    }
     setToken(null)
     setUser(null)
+    localStorage.removeItem('golf:token')
+    localStorage.removeItem('golf:user')
   }
 
   return (

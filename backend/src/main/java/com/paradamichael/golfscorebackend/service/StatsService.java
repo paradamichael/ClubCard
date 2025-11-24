@@ -18,13 +18,11 @@ public class StatsService {
         this.clubRepository = clubRepository;
     }
 
-    public List<Map<String, Object>> averageScorePerCourse() {
-        List<Object[]> rows = scorecardRepository.findAverageScorePerCourse();
-        return rows.stream().map(r -> Map.of("courseId", r[0], "avgScore", r[1])).collect(Collectors.toList());
+    public List<Map<String, Object>> getCourseAverages(Long userId) {
+        return scorecardRepository.findAverageScorePerCourse(userId);
     }
 
-    public List<Map<String, Object>> clubPerformance() {
-        List<Object[]> rows = clubRepository.findAvgCarryByClubType();
-        return rows.stream().map(r -> Map.of("clubType", r[0], "avgCarry", r[1])).collect(Collectors.toList());
+    public List<Map<String, Object>> getClubPerformance(Long userId) {
+        return clubRepository.findAvgCarryByClubType(userId);
     }
 }

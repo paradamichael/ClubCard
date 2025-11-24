@@ -20,6 +20,7 @@ public class Scorecard {
     private Course course;
 
     private LocalDate playedOn;
+    private String selectedTee;
 
     @ElementCollection
     @CollectionTable(name = "scorecard_scores", joinColumns = @JoinColumn(name = "scorecard_id"))
@@ -33,6 +34,8 @@ public class Scorecard {
     public void setCourse(Course course) { this.course = course; }
     public LocalDate getPlayedOn() { return playedOn; }
     public void setPlayedOn(LocalDate playedOn) { this.playedOn = playedOn; }
+    public String getSelectedTee() { return selectedTee; }
+    public void setSelectedTee(String selectedTee) { this.selectedTee = selectedTee; }
     public List<Integer> getScores() { return scores; }
     public void setScores(List<Integer> scores) { this.scores = scores; }
 }
