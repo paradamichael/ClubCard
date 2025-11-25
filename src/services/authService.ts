@@ -19,7 +19,17 @@ export default {
     return { token, user }
   },
 
+  async googleLogin(idToken: string) {
+    const res = await api.post('/auth/google', { idToken })
+    const user = res.data.user
+    const token = 'authenticated'
+    localStorage.setItem('golf:token', token)
+    localStorage.setItem('golf:user', JSON.stringify(user))
+    return { token, user }
+  },
+
   logout() {
     localStorage.removeItem('golf:token')
+    localStorage.removeItem('golf:user')
   }
 }

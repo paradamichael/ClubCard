@@ -14,7 +14,12 @@ public class ScorecardController {
     public ScorecardController(ScorecardService scorecardService) { this.scorecardService = scorecardService; }
 
     @GetMapping
-    public List<Scorecard> list() { return scorecardService.findAll(); }
+    public List<Scorecard> list(@RequestParam(required = false) Long userId) { 
+        if (userId != null) {
+            return scorecardService.findByUserId(userId);
+        }
+        return scorecardService.findAll(); 
+    }
 
     @PostMapping
     public Scorecard create(@RequestBody Scorecard s) { return scorecardService.save(s); }

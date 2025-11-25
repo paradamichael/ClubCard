@@ -2,6 +2,8 @@
 node_modules/
 dist/
 .env
+.env.local
+.env.production
 .DS_Store
 .vscode/
 
@@ -12,3 +14,5 @@ backend/mvnw
 backend/mvnw.cmd
 backend/.idea/
 backend/*.iml
+backend/.env
+backend/.env.production

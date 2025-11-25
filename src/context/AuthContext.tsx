@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import AuthService from '../services/authService'
+import { useTheme } from './ThemeContext'
 
 type User = { id?: string; email?: string; name?: string } | null
 
@@ -8,12 +9,14 @@ type AuthContextType = {
   token: string | null
   login: (email?: string, password?: string) => Promise<void> | void
   signup: (email: string, password: string, name?: string) => Promise<void>
+  googleLogin: (idToken: string) => Promise<void>
   logout: () => void
 }
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType)
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
+function AuthProviderInner({ children }: { children: React.ReactNode }) {
+  const { loadUserPreferences } = useTheme()
   const [token, setToken] = useState<string | null>(() => localStorage.getItem('golf:token'))
   const [user, setUser] = useState<User>(() => {
     try {
@@ -25,6 +28,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   })
 
   // Keycloak is disabled - using simple backend auth
+  
+  // Load user preferences on mount if user is already logged in
+  useEffect(() => {
+    if (user?.id) {
+      loadUserPreferences(user.id)
+    }
+  }, [])
 
   useEffect(() => {
     if (token) localStorage.setItem('golf:token', token)
@@ -42,6 +52,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (res.user) {
         setUser(res.user)
         setToken(res.token || 'simple-auth-token')
+        // Load user preferences after login
+        if (res.user.id) {
+          await loadUserPreferences(res.user.id)
+        }
       }
     }
   }
@@ -51,6 +65,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (res.user) {
       setUser(res.user)
       setToken(res.token || 'simple-auth-token')
+      // Load user preferences after signup
+      if (res.user.id) {
+        await loadUserPreferences(res.user.id)
+      }
+    }
+  }
+
+  async function googleLogin(idToken: string) {
+    const res = await AuthService.googleLogin(idToken)
+    if (res.user) {
+      setUser(res.user)
+      setToken(res.token || 'simple-auth-token')
+      // Load user preferences after Google login
+      if (res.user.id) {
+        await loadUserPreferences(res.user.id)
+      }
     }
   }
 
@@ -62,9 +92,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, token, login, signup, logout }}>
+    <AuthContext.Provider value={{ user, token, login, signup, googleLogin, logout }}>
       {children}
     </AuthContext.Provider>
+  )
+}
+
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  return (
+    <AuthProviderInner>
+      {children}
+    </AuthProviderInner>
   )
 }
 
