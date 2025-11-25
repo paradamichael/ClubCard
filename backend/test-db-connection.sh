@@ -68,6 +68,22 @@ elif [ "$DB_PORT" = "6543" ]; then
 fi
 echo ""
 
+echo "Test 5: PostgreSQL Protocol Connection Test"
+echo "--------------------------------------------"
+if command -v psql > /dev/null 2>&1; then
+    echo "Testing actual PostgreSQL connection..."
+    PGPASSWORD="$SPRING_DATASOURCE_PASSWORD" psql -h "$DB_HOST" -p "$DB_PORT" -U "$SPRING_DATASOURCE_USERNAME" -d postgres -c "SELECT version();" 2>&1 | head -10
+    if [ $? -eq 0 ]; then
+        echo "✓ PostgreSQL connection successful!"
+    else
+        echo "✗ PostgreSQL connection failed (see error above)"
+        echo "  This indicates authentication or IP restriction issue"
+    fi
+else
+    echo "psql not available, skipping PostgreSQL protocol test"
+fi
+echo ""
+
 echo "=========================================="
 echo "Network diagnostics complete. Starting application..."
 echo "=========================================="

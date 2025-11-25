@@ -14,8 +14,8 @@ RUN mvn clean package -DskipTests
 # Stage 2: Runtime stage
 FROM eclipse-temurin:17-jre-alpine
 
-# Install network diagnostic tools
-RUN apk add --no-cache bind-tools netcat-openbsd busybox-extras
+# Install network diagnostic tools including PostgreSQL client
+RUN apk add --no-cache bind-tools netcat-openbsd busybox-extras postgresql-client
 
 # Set working directory
 WORKDIR /app
