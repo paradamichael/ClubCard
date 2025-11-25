@@ -13,6 +13,7 @@
     "dev:all": "echo 'Start backend in one terminal: npm run backend:dev' && echo 'Start frontend: npm run dev'"
   },
   "dependencies": {
+    "@react-oauth/google": "^0.12.2",
     "axios": "^1.13.2",
     "keycloak-js": "^22.0.5",
     "react": "^18.2.0",

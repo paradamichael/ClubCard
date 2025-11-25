@@ -17,7 +17,10 @@ public class ClubController {
     }
 
     @GetMapping
-    public List<Club> list() {
+    public List<Club> list(@RequestParam(required = false) Long userId) {
+        if (userId != null) {
+            return clubRepository.findByUserId(userId);
+        }
         return clubRepository.findAll();
     }
 

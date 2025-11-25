@@ -22,7 +22,11 @@ export default function Scorecard() {
 
   const fetchSavedRounds = async () => {
     try {
-      const res = await api.get('/scorecards')
+      if (!user?.id) {
+        console.log('No user logged in')
+        return
+      }
+      const res = await api.get(`/scorecards?userId=${user.id}`)
       // Fetch holes for each course to calculate par
       const roundsWithPar = await Promise.all(
         res.data.map(async (round: any) => {

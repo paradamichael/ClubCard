@@ -2,24 +2,27 @@ import React, { useEffect, useState } from 'react'
 import Card from '../components/Card'
 import Button from '../components/Button'
 import ClubService from '../services/clubService'
+import { useAuth } from '../context/AuthContext'
 
 type Club = { id?: number; clubName: string; clubType?: string; carryDistance?: number }
 
 export default function ClubDistances() {
+  const { user } = useAuth()
   const [clubs, setClubs] = useState<Club[]>([])
   const [loading, setLoading] = useState(false)
   const [newName, setNewName] = useState('')
   const [newDistance, setNewDistance] = useState<number | ''>('')
 
   async function load() {
+    if (!user?.id) return
     setLoading(true)
     try {
-      const data = await ClubService.list()
+      const data = await ClubService.list(user.id)
       setClubs(data)
     } finally { setLoading(false) }
   }
 
-  useEffect(() => { load() }, [])
+  useEffect(() => { load() }, [user?.id])
 
   async function addClub() {
     if (!newName) return alert('Provide a club name')

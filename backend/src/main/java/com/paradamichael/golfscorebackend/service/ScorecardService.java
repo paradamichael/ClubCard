@@ -16,6 +16,10 @@ public class ScorecardService {
 
     public List<Scorecard> findAll() { return scorecardRepository.findAll(); }
 
+    public List<Scorecard> findByUserId(Long userId) { 
+        return scorecardRepository.findByUserIdOrderByPlayedOnDesc(userId); 
+    }
+
     public Scorecard save(Scorecard s) { return scorecardRepository.save(s); }
 
     public void delete(Long id) { scorecardRepository.deleteById(id); }
