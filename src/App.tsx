@@ -1,12 +1,16 @@
 import React from 'react'
+import { useLocation } from 'react-router-dom'
 import AppRoutes from './router'
 import Header from './components/Header'
 
 export default function App() {
+  const location = useLocation()
+  const hideHeader = ['/', '/login', '/signup'].includes(location.pathname)
+
   return (
     <>
-      <Header />
-      <main style={{ padding: '1rem' }}>
+      {!hideHeader && <Header />}
+      <main>
         <AppRoutes />
       </main>
     </>

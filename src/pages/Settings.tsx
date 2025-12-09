@@ -1,9 +1,19 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import Card from '../components/Card'
+import Button from '../components/Button'
 import { useTheme } from '../context/ThemeContext'
+import { useAuth } from '../context/AuthContext'
 
 export default function Settings() {
   const { isDarkMode, toggleDarkMode } = useTheme()
+  const { logout } = useAuth()
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    logout()
+    navigate('/')
+  }
 
   return (
     <div className="app-container">
@@ -61,6 +71,18 @@ export default function Settings() {
             </span>
           </label>
         </div>
+
+        <h3 style={{ marginTop: '24px', marginBottom: '16px', fontSize: '18px' }}>Account</h3>
+        <Button 
+          onClick={handleLogout}
+          style={{ 
+            width: '100%',
+            backgroundColor: '#dc2626',
+            marginTop: '8px'
+          }}
+        >
+          Log Out
+        </Button>
 
         <h3 style={{ marginTop: '24px', marginBottom: '16px', fontSize: '18px' }}>About</h3>
         <p className="muted">ClubCard - Your digital golf scorecard</p>

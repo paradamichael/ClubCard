@@ -1,6 +1,7 @@
 package com.paradamichael.golfscorebackend.controller;
 
 import com.paradamichael.golfscorebackend.model.Club;
+import com.paradamichael.golfscorebackend.model.User;
 import com.paradamichael.golfscorebackend.repository.ClubRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,22 @@ public class ClubController {
     }
 
     @PostMapping
-    public Club create(@RequestBody Club club) {
+    public Club create(@RequestBody java.util.Map<String, Object> payload) {
+        Club club = new Club();
+        club.setClubName((String) payload.get("clubName"));
+        club.setClubType((String) payload.get("clubType"));
+        
+        if (payload.get("carryDistance") != null) {
+            club.setCarryDistance(((Number) payload.get("carryDistance")).intValue());
+        }
+        
+        if (payload.get("userId") != null) {
+            Long userId = ((Number) payload.get("userId")).longValue();
+            User user = new User();
+            user.setId(userId);
+            club.setUser(user);
+        }
+        
         return clubRepository.save(club);
     }
 
